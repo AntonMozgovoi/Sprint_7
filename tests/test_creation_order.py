@@ -13,5 +13,5 @@ class TestCreationOrder:
     def test_creation_order_color(self, color):
         login_body = data.TestOrder.ORDER
         login_request = requests.post(Urls.BASE_URL + Urls.CREATION_ORDER, json=login_body)
-        r = login_request.json()
-        assert login_request.status_code == 201 and r["track"]
+        response = login_request.json()
+        assert login_request.status_code == 201 and response["track"]
