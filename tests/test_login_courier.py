@@ -1,5 +1,7 @@
 import allure
 import requests
+
+from errors_message import MessageLoginCourier
 from urls import Urls
 from data import TestLogin
 
@@ -17,14 +19,14 @@ class TestLoginCourier:
     def test_wrong_login(self):
         login_body = TestLogin.WRONG_LOGIN
         login_request = requests.post(Urls.BASE_URL + Urls.LOGIN_COURIER, data=login_body)
-        assert login_request.status_code == 404 and login_request.json()["message"] == "Учетная запись не найдена"
+        assert login_request.status_code == 404 and login_request.json()["message"] == MessageLoginCourier.REG_NONEXISTENT
 
     @allure.title('Проверка неуспешной авторизации курьера без одного параметра')
     @allure.description('Проверяем статус 400 и текст ошибки "Недостаточно данных для входа"')
     def test_without_login(self):
         login_body = TestLogin.REQ_WITHOUT_LOGIN
         login_request = requests.post(Urls.BASE_URL + Urls.LOGIN_COURIER, data=login_body)
-        assert login_request.status_code == 400 and login_request.json()["message"] == "Недостаточно данных для входа"
+        assert login_request.status_code == 400 and login_request.json()["message"] == MessageLoginCourier.LOG_WITHOUT_LOG_OR_PASS
 
 
 

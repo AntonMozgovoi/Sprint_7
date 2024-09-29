@@ -1,5 +1,7 @@
 import allure
 import requests
+
+from errors_message import MessageRegistrationCourier
 from urls import Urls
 from api import CourierApi
 from data import TestRegistration
@@ -19,13 +21,11 @@ class TestRegistrationCourier:
         body = TestDataHelper.generate_registration_body()
         CourierApi.creation_courier(body)
         creation_request = CourierApi.creation_courier(body)
-        assert creation_request.status_code == 409 and creation_request.json()["message"] == (
-            "Этот логин уже используется. Попробуйте другой.")
+        assert creation_request.status_code == 409 and creation_request.json()["message"] == MessageRegistrationCourier.REG_REPEAT_LOGIN
 
     @allure.title('Проверка неуспешной повторной авторизации курьера без параметра')
     @allure.description('Проверяем статус 400 и сообщением "Недостаточно данных для создания учетной записи" в теле ответа')
     def test_wrong_body(self):
         wrong_body = TestRegistration.REGISTRATION_WRONG_BODY
         wrong_registration_request = requests.post(Urls.BASE_URL + Urls.REGISTRATION_COURIER, data=wrong_body)
-        assert wrong_registration_request.status_code == 400 and wrong_registration_request.json()["message"] == (
-            "Недостаточно данных для создания учетной записи")
+        assert wrong_registration_request.status_code == 400 and wrong_registration_request.json()["message"] == MessageRegistrationCourier.REG_WITHOUT_LOG_OR_PASS
